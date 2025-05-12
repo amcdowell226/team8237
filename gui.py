@@ -5,6 +5,7 @@ from PySide6.QtGui import QPixmap, QImage
 from PySide6.QtCore import Qt
 from qt_material import apply_stylesheet
 from __feature__ import snake_case, true_property
+#import audio_effects
 
 
 our_app = QApplication([])
@@ -28,25 +29,44 @@ class OurWindow(QWidget):
         our_title.alignment = Qt.AlignCenter
         our_title.style_sheet = "QLabel { color:#2e3d7f; }"
 
+        self.note_input_container = QVBoxLayout()
+        self.num_of_notes = QLineEdit()
+        self.num_of_notes.placeholder_text = "How many notes would you like in your jingle? (Minumum: 3, Maximum: 10)"
+
+        submit_btn = QPushButton("Submit")
+        submit_btn.clicked.connect(self.create_note_inputs)
+
+        self.note_inputs = []
+        save_notes_btn = QPushButton("Save Notes")
+        save_notes_btn.clicked.connect(self.save_notes)
+
+        self.saved_notes_label = QLabel()
+
+        #maybe not needed but leaving this here in case it is
         ent_note = QLineEdit("Enter a Note Value")
         ent_note.minimum_width = 250
         ent_note.select_all()
 
-        play_btn1 = QPushButton("Play")
+        play_btn1 = QPushButton("Play Jingle")
             # play_btn1.clicked.connect(self.on_play1)
 
-        our_list = ["Choose a effect", "effect1", "effect2", "effect3"]
+        our_list = ["Choose an effect", "Flanger", "Wahwah", "Tremolo", "Distortion", "Chorus", "High Pitch", "Low Pitch", "Griffin", "Slow Down", "Speed Up"]
         our_combo_box = QComboBox()
         our_combo_box.add_items(our_list)
 
-        play_btn2 = QPushButton("Play")
+        play_btn2 = QPushButton("Play Affected Jingle")
             # play_btn2.clicked.connect(self.on_play2)
-        save_btn = QPushButton("Save")
+        save_btn = QPushButton("Save Jingle")
             # save_btn.clicked.connect(self.on_save)
 
         layout.add_widget(our_image)
         layout.add_widget(our_title)
-        layout.add_widget(ent_note)
+        layout.add_widget(self.num_of_notes)
+        layout.add_widget(submit_btn)
+        layout.add_layout(self.note_input_container)
+        layout.add_widget(save_notes_btn)
+        layout.add_widget(self.saved_notes_label)
+        #layout.add_widget(ent_note)
         layout.add_widget(play_btn1)
         layout.add_widget(our_combo_box)
         layout.add_widget(play_btn2)
@@ -67,17 +87,63 @@ class OurWindow(QWidget):
         play_btn1.set_property('class', 'dark_blue')
         play_btn2.set_property('class', 'lighter_blue')
         save_btn.set_property('class', 'light_blue')
+    
+    @Slot()
+    def create_note_inputs(self):
+
+        while self.note_input_container.count():
+            child = self.note_input_container.take_at(0)
+            if child.widget():
+                child.widget().delete_later()
+        self.note_inputs.clear()
+
+        try:
+            count = int(self.num_of_notes.text)
+            if count < 3 or count > 10:
+                self.try_again_label = QLabel()
+                self.try_again_label.text = "Please enter a number between 3 and 10."
+                self.try_again_label.style_sheet = "color: red;"
+                self.note_input_container.add_widget(self.try_again_label)
+                return
+        except ValueError:
+            self.try_again_label = QLabel()
+            self.try_again_label.text = "Please enter a valid number only."
+            self.try_again_label.style_sheet = "color: red;"
+            self.note_input_container.add_widget(self.try_again_label)
+            return
+
+        for _ in range(count):
+            note_input = QLineEdit()
+            note_input.placeholder_text = "Enter a note value"
+            self.note_input_container.add_widget(note_input)
+            self.note_inputs.append(note_input)
+
+    @Slot()
+    def save_notes(self):
+        try:
+            notes = [int(box.text) for box in self.note_inputs]
+            self.saved_notes_label.text = f"Saved Notes: {notes}"
+            self.saved_notes_label.style_sheet = "color: black;"
+        except ValueError:
+            self.saved_notes_label.text = "Please enter valid integers only."
+            self.saved_notes_label.style_sheet = "color: red;"
+        #do a check to see if all boxes are filled out
+
+
 
 
 # functions for play_btn1,play_btn2, and save_btn
-# @Slot()
-#     def on_play1(self):
+    #@Slot()
+    #def on_play1(self):
+        #call Aliyah's play jingle function
     
-# @Slot()
-#     def on_play2(self):
+#   @Slot()
+#   def on_play2(self):
+        #call Han's effect function and then call Aliyah's play function?
 
-# @Slot()
-#     def on_save(self):
+#   @Slot()
+#   def on_save(self):
+        #save as a .wav file? (ask Aliyah about this)
 
 
 
