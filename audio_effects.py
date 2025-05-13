@@ -2,8 +2,8 @@ from audioFX.Fx import Fx
 from librosa import load
 import soundfile
 
-infile = 'C:\\Users\\corke\\Desktop\\cst205\\code\\sample.wav'
-outfile = 'C:\\Users\\corke\\Desktop\\cst205\\code\\audio_with_fx.wav'
+infile = 'jingle.wav'
+outfile = 'altered_jingle.wav'
 
 x, sr = load(infile)
 
@@ -89,7 +89,7 @@ def low_pitch(x, sr, fx):
                 "pitch": 1.0
                 }
 
-    optional_parameters = {"pitch_semitones": 12.0,
+    optional_parameters = {"pitch_semitones": 5.0,
                            "pitch_mirror": True
                             }
 
