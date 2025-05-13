@@ -20,7 +20,7 @@ def create_pcm(frequency):
     y_vals = 32767 * .3 * np.sin(ang_freq * x_vals / SAMPLES_S)
     return np.int16(y_vals)
 
-def new_wav(channels, filename, *args):
+def new_wav(channels, filename, args):
     seconds = len(args)
 
     chunk_size = (int(36 + (seconds * SAMPLES_S * BITS_SAMPLE/8))).to_bytes(4, 'little')
