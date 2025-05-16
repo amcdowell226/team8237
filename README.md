@@ -3,3 +3,4 @@ It allows the user to input some notes to make a jingle, choice an effect to add
 and plays it.
 
 Trello -> https://trello.com/b/XE8JUVVl/team-8237
+github -> https://github.com/amcdowell226/team8237
